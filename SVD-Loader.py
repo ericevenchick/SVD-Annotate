@@ -130,17 +130,7 @@ for peripheral in peripherals:
 		print("\t\tNo registers.")
 		continue
 
-	# try:
-	# Iterage registers to get size of peripheral
-	# Most SVDs have an address-block that specifies the size, but
-	# they are often far too large, leading to issues with overlaps.
-	length = calculate_peripheral_size(peripheral, default_register_size)
-
-	# Generate structure for the peripheral
-	peripheral_struct = StructureDataType(peripheral.name, length)
-
-	peripheral_start = peripheral.base_address
-	peripheral_end = peripheral_start + length
+	createLabel(toAddr(peripheral.base_address), peripheral.name, False)
 
 	for register in peripheral.registers:
 		register_size = default_register_size if not register._size else register._size
@@ -154,19 +144,7 @@ for peripheral in peripherals:
 		elif rs == 8:
 			r_type = UnsignedLongLongDataType()
 
-		peripheral_struct.replaceAtOffset(register.address_offset, r_type, register_size/8, register.name, register.description)
-
-
-	addr = space.getAddress(peripheral_start)
-
-
-	dtm.addDataType(peripheral_struct, DataTypeConflictHandler.REPLACE_HANDLER)
-
-	listing.createData(addr, peripheral_struct, False)
-
-	symtbl.createLabel(addr,
-					peripheral.name,
-					namespace,
-					SourceType.USER_DEFINED );
-	# except:
-	# 	print("\t\tFailed to generate peripheral " + peripheral.name)
+		addr = toAddr(register.address_offset + peripheral.base_address)
+		createData(addr, r_type)
+		createLabel(addr, "%s.%s" % (peripheral.name, register.name), True)
+		setEOLComment(addr, register.description)
