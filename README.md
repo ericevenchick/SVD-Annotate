@@ -20,7 +20,7 @@ The script can be found in the `ARM` folder in Ghidra's Script Manager.
 
 ## Credits
 
-The original SVD-Loader is by Thomas Roth / leveldown security [More info here.](https://leveldown.de/blog/svd-loader/).
+The original SVD-Loader is by Thomas Roth / leveldown security [More info here](https://leveldown.de/blog/svd-loader/).
 
 The cmsis-svd code is a fork from Posborne's [cmsis-svd](https://github.com/posborne/cmsis-svd/), ported to work on Ghidra's Jython. Without this library this script could not exist!
 
